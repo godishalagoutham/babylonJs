@@ -1,12 +1,6 @@
 
 var createScene = function () {
-
-    // Low Poly Character with Blender Tutorial of Grant Abbitt: https://www.youtube.com/user/mediagabbitt
-    // Character animations by Mixamo: https://www.mixamo.com/
-
     engine.enableOfflineSupport = false;
-
-    // Scene and Camera
     var scene = new BABYLON.Scene(engine);
 
     var camera1 = new BABYLON.ArcRotateCamera("camera1", Math.PI / 2, Math.PI / 4, 10, new BABYLON.Vector3(0, -5, 0), scene);
