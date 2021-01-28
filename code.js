@@ -1,4 +1,3 @@
-
 var createScene = function () {
     engine.enableOfflineSupport = false;
     var scene = new BABYLON.Scene(engine);
@@ -47,6 +46,14 @@ var createScene = function () {
     groundMaterial.specularColor = new BABYLON.Color3(.1, .1, .1);
     ground.material = groundMaterial;
 
+
+    var sphere = BABYLON.MeshBuilder.CreateSphere("sphere", { diameter: 1 }, scene);
+    sphere.setPositionWithLocalVector(new BABYLON.Vector3(10.0, 0.7, 0.1));
+    var sphereMat = new BABYLON.StandardMaterial("sphereMat", scene);
+    sphere.material = sphereMat;
+
+    sphere.actionManager = new BABYLON.ActionManager(scene);
+
     // Keyboard events
     var inputMap = {};
     scene.actionManager = new BABYLON.ActionManager(scene);
@@ -80,10 +87,31 @@ var createScene = function () {
         const idleAnim = scene.getAnimationGroupByName("idle");
         const sambaAnim = scene.getAnimationGroupByName("hiphop");
 
-        
+
 
         //Rendering loop (executed for everyframe)
         scene.onBeforeRenderObservable.add(() => {
+            // if (hero.intersectsMesh(sphere, false)) {
+            //     sphere.material.emissiveColor = new BABYLON.Color4(1, 0, 0, 1);
+            // } else {
+            //     sphere.material.emissiveColor = new BABYLON.Color4(1, 1, 0, 1);
+            // }
+
+            sphere.actionManager.registerAction(
+                new BABYLON.SetValueAction(
+                    {
+                        trigger: BABYLON.ActionManager.OnIntersectionEnterTrigger,
+                        parameter: {
+                            mesh: hero,
+                            usePreciseIntersection: false
+                        }
+                    },
+                    sphere,
+                    "scaling",
+                    new BABYLON.Vector3(1.2, 1.2, 1.2)
+                )
+            );
+
             var keydown = false;
             //Manage the movements of the character (e.g. position, direction)
             if (inputMap["w"]) {
@@ -140,6 +168,7 @@ var createScene = function () {
                     animating = false;
                 }
             }
+
         });
     });
 
